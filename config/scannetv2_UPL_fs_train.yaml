@@ -1,0 +1,103 @@
+DATA:
+  data_name: scannetv2         # 数据集名称，决定加载的数据集类型
+  data_root: datasets/ScanNet/blocks_bs1_s1/data # 预处理后的点云数据路径（.npy文件）
+  classes: 21                  # 总类别数，影响模型输出维度
+  fea_dim: 6                   # 输入点云特征维度（如xyz+rgb）
+  voxel_size: 0.02             # 体素化时每个体素的边长，影响空间分辨率
+  voxel_max: 20480             # 每个场景最大体素数，控制单样本内存消耗
+  loop: 1                      # 数据集循环次数，训练时数据重复利用
+  cvfold: 0                    # 交叉验证折数，决定训练/验证集划分
+
+TRAIN:
+  #arch
+  arch: stratified_transformer # 主干网络结构名
+  stem_transformer: True       # 是否用transformer结构做输入特征处理
+  use_xyz: True                # 是否将xyz坐标加入特征输入
+  sync_bn: False               # 是否用同步BN，多卡训练时保持统计一致
+  rel_query: True              # transformer注意力机制相关参数
+  rel_key: True                # transformer注意力机制相关参数
+  rel_value: True              # transformer注意力机制相关参数
+  quant_size: 0.01             # 量化步长，影响空间分辨率
+  downsample_scale: 8          # 下采样比例，决定特征金字塔层级
+  num_layers: 4                # 主干网络层数
+  patch_size: 1                # patch大小，决定局部区域划分
+  window_size: 4               # transformer局部窗口大小
+  depths: [2, 2, 6, 2]         # 每层深度（block数）
+  channels: [48, 96, 192, 384] # 每层通道数
+  num_heads: [3, 6, 12, 24]    # 每层注意力头数
+  up_k: 3                      # 上采样时的邻居数
+  drop_path_rate: 0.3          # 路径丢弃率，提升模型泛化能力
+  concat_xyz: True             # 是否拼接xyz到特征
+  grid_size: 0.04              # 网格大小，影响空间划分
+  max_batch_points: 140000     # 单批最大点数，控制显存消耗
+  max_num_neighbors: 34        # ball query最大邻居数，影响局部特征聚合范围
+  ratio: 0.25                  # KPConv卷积相关参数
+  k: 16                        # KPConv卷积相关参数
+
+  # training
+  aug: True                    # 是否使用数据增强（如旋转、缩放、抖动）
+  transformer_lr_scale: 0.1    # transformer部分学习率缩放
+  jitter_sigma: 0.005          # 点云抖动增强参数（标准差）
+  jitter_clip: 0.02            # 点云抖动增强参数（裁剪范围）
+  scheduler_update: epoch      # 学习率调度器更新方式（epoch/step）
+  scheduler: MultiStep         # 学习率调度器类型
+  warmup: linear               # 是否使用warmup
+  warmup_iters: 1500           # warmup相关参数（步数）
+  warmup_ratio: 0.000001       # warmup相关参数（初始比例）
+  use_amp: True                # 是否使用混合精度训练
+  optimizer: AdamW             # 优化器类型
+  ignore_label: 255            # 忽略的标签（如255），用于损失计算时屏蔽无效点
+  train_gpu: [0, 1, 2, 3] # 指定训练用的GPU编号
+  workers: 16                  # DataLoader线程数（总数，分配到每个GPU）
+  base_lr: 0.00005             # 基础学习率
+  epochs: 100                  # 总训练轮数
+  start_epoch: 0               # 起始轮数（用于断点续训）
+  step_epoch: 30               # 学习率衰减步长
+  multiplier: 0.1              # 学习率乘子
+  momentum: 0.9                # 优化器动量
+  weight_decay: 0.01           # 权重衰减
+  drop_rate: 0.5               # dropout比例
+  manual_seed: 123             # 随机种子，保证实验可复现
+  # manual_seed:
+  print_freq: 10             # 日志打印频率
+  save_freq: 1                 # 模型保存频率
+  save_path: ./my_weights/scannetv2      # 模型保存路径
+  weight:                      # 初始权重路径（用于加载预训练模型）
+  resume:                      # 恢复训练的checkpoint路径
+  evaluate: True               # 是否在验证集评估
+  eval_freq: 1                 # 验证频率
+  eval_start_epoch: 3        # 从第几轮开始验证
+
+Few-shot:
+  num_episode: 400             # 训练episode数量
+  n_way: 1                     # 每个episode的类别数（N-way）
+  k_shot: 1                    # 每类支持集样本数（K-shot）
+  n_queries: 1                 # 每个episode的查询样本数
+  num_episode_per_comb: 1000   # 每种类别组合的episode数量
+  pretrain_backbone:           # 预训练主干路径
+  n_subprototypes: 200         # 每类原型数
+  vis: 0                       # 可视化相关参数
+  forvis: 0                    # 可视化相关参数
+  vis_save_path:               # 可视化结果保存路径
+  target_class: table          # 目标类别
+  num_inference_samples: 3     # 推理时采样次数
+  base_proto_ema: 0.999        # 基础类别原型EMA系数
+  var_infer_hidden_dim: 96     # 变分推理MLP隐藏层维度
+  max_kl_weight: 1.0           # KL loss最大权重
+  fixed_num_points: 2048       # 每个样本固定点数
+  kl_warmup_epochs: 10         # KL损失warmup轮数
+  kl_warmup_type: linear       # KL损失warmup类型 (linear/cosine/exponential)
+  pa_type: dpr                # 原型注意力模式：dpr(双流)/spr(单流)
+  use_vpir: 1                   # 是否启用VPIR（1启用，0关闭）
+
+Distributed:
+  dist_url: tcp://127.0.0.1:6789 # 分布式训练通信地址
+  dist_backend: 'nccl'           # 通信后端
+  multiprocessing_distributed: True # 是否多进程分布式训练
+  world_size: 1                  # 总进程数
+  rank: 0                        # 当前进程编号
+
+TEST:
+  test: False                    # 是否测试模式
+  eval_split: test               # 验证/测试集
+
