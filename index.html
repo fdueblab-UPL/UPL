@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPL: Uncertainty-aware Prototype Learning</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 40px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+            opacity: 0.9;
+        }
+
+        .authors {
+            font-size: 1.1em;
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: background-color 0.3s;
+        }
+
+        .badge:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .section {
+            background: white;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .section h3 {
+            color: #34495e;
+            margin: 20px 0 10px 0;
+            font-size: 1.3em;
+        }
+
+        .abstract {
+            font-size: 1.1em;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .method-image {
+            text-align: center;
+            margin: 30px 0;
+        }
+
+        .method-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .result-item {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        .result-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .bibtex {
+            background-color: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.4;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+
+        .links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .link-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .link-btn.paper {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
+        .link-btn.video {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #7f8c8d;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        .placeholder {
+            background-color: #ecf0f1;
+            border: 2px dashed #bdc3c7;
+            padding: 40px;
+            text-align: center;
+            color: #7f8c8d;
+            border-radius: 8px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .badges {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .links {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>UPL: Uncertainty-aware Prototype Learning</h1>
+            <div class="subtitle">with Variational Inference for Few-shot Point Cloud Segmentation</div>
+            <div class="authors">PolarSnowLeopard et al.</div>
+            <div class="badges">
+                <a href="#" class="badge">ICASSP 2026</a>
+                <a href="#" class="badge">Under Review</a>
+                <a href="#" class="badge">arXiv</a>
+            </div>
+        </header>
+
+        <div class="section">
+            <h2>Abstract</h2>
+            <div class="abstract">
+                Few-shot 3D semantic segmentation aims to generate accurate semantic masks for query point clouds with only a few annotated support examples. Existing prototype-based methods typically construct compact and deterministic prototypes from the support set to guide query segmentation. However, such rigid representations are unable to capture the intrinsic uncertainty introduced by scarce supervision, which often results in degraded robustness and limited generalization.
+                <br><br>
+                In this work, we propose <strong>UPL</strong> (Uncertainty-aware Prototype Learning), a probabilistic approach designed to incorporate uncertainty modeling into prototype learning for few-shot 3D segmentation. Our framework introduces two key components. First, UPL introduces a dual-stream prototype refinement module that enriches prototype representations by jointly leveraging limited information from both support and query samples. Second, we formulate prototype learning as a variational inference problem, regarding class prototypes as latent variables. This probabilistic formulation enables explicit uncertainty modeling, providing robust and interpretable mask predictions.
+                <br><br>
+                Extensive experiments on the widely used ScanNet and S3DIS benchmarks show that our UPL achieves consistent state-of-the-art performance under different settings while providing reliable uncertainty estimation.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Method</h2>
+            <div class="method-image">
+                <img src="figs/UPL_framework.png" alt="UPL Framework Overview">
+            </div>
+            <p>Our UPL framework consists of two primary modules:</p>
+            <ul>
+                <li><strong>Dual-stream Prototype Refinement (DPR)</strong>: Refines prototypes by leveraging mutual information between support and query features</li>
+                <li><strong>Variational Prototype Inference Regularization (VPIR)</strong>: Models prototypes as Gaussian latent variables for uncertainty-aware learning</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Results</h2>
+            <div class="results-grid">
+                <div class="result-item">
+                    <img src="figs/vis_horiziopn.png" alt="Qualitative Results">
+                    <h3>Qualitative Results</h3>
+                    <p>UPL produces cleaner object boundaries and provides uncertainty maps that highlight regions of occlusion and label ambiguity.</p>
+                </div>
+                <div class="result-item">
+                    <img src="figs/uncertainty_horizon.png" alt="Uncertainty Analysis">
+                    <h3>Uncertainty Analysis</h3>
+                    <p>Our framework provides interpretable uncertainty estimates that correlate with prediction errors, enabling better model interpretability.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>BibTeX</h2>
+            <div class="bibtex">@article{zhao2024upl,
+  title={Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation},
+  author={Zhao, Yifei and Zhao, Fanyu and Li, Yinsheng},
+  journal={arXiv preprint arXiv:XXXX.XXXXX},
+  year={2024}
+}</div>
+        </div>
+
+        <div class="links">
+            <a href="#" class="link-btn paper">📄 Paper (arXiv)</a>
+            <a href="https://github.com/your-username/UPL" class="link-btn">💻 Code</a>
+            <a href="#" class="link-btn video">🎥 Video</a>
+        </div>
+
+        <footer>
+            <p>© 2025 PolarSnowLeopard. Built with GitHub Pages.</p>
+        </footer>
+    </div>
+</body>
+</html>
