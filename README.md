@@ -35,10 +35,17 @@ Our UPL framework consists of two primary modules:
 
 | Dataset | Method | 1-way 1-shot | 1-way 5-shot | 2-way 1-shot | 2-way 5-shot |
 |---------|--------|--------------|--------------|--------------|--------------|
-| **S3DIS** | CoSeg | 47.21 | 50.04 | 36.95 | 40.36 |
-| | **UPL (Ours)** | **48.60** | **52.22** | **37.79** | **41.87** |
-| **ScanNet** | CoSeg | 41.78 | 46.21 | 28.78 | 34.68 |
-| | **UPL (Ours)** | **43.00** | **46.83** | **32.39** | **38.40** |
+| | | **S0** | **S1** | **Mean** | **S0** | **S1** | **Mean** | **S0** | **S1** | **Mean** | **S0** | **S1** | **Mean** |
+| **S3DIS** | AttMPTI | 36.32 | 38.36 | 37.34 | 46.71 | 42.70 | 44.71 | 31.09 | 29.62 | 30.36 | 39.53 | 32.62 | 36.08 |
+| | QGE | 41.69 | 39.09 | 40.39 | 50.59 | 46.41 | 48.50 | 33.45 | 30.95 | 32.20 | 40.53 | 36.13 | 38.33 |
+| | QPGA | 35.50 | 35.83 | 35.67 | 38.07 | 39.70 | 38.89 | 25.52 | 26.26 | 25.89 | 30.22 | 32.41 | 31.32 |
+| | CoSeg | 46.31 | 48.10 | 47.21 | 51.40 | 48.68 | 50.04 | 37.44 | 36.45 | 36.95 | 42.27 | 38.45 | 40.36 |
+| | **UPL (Ours)** | **48.18** | **49.02** | **48.60** | **55.92** | 48.53 | **52.22** | **38.13** | **37.44** | **37.79** | 41.78 | **41.96** | **41.87** |
+| **ScanNet** | AttMPTI | 34.03 | 30.97 | 32.50 | 39.09 | 37.15 | 38.12 | 25.99 | 23.88 | 24.94 | 30.41 | 27.35 | 28.88 |
+| | QGE | 37.38 | 33.02 | 35.20 | 45.08 | 41.89 | 43.49 | 26.85 | 25.17 | 26.01 | 28.35 | 31.49 | 29.92 |
+| | QPGA | 34.57 | 33.37 | 33.97 | 41.22 | 38.65 | 39.94 | 21.86 | 21.47 | 21.67 | 30.67 | 27.69 | 29.18 |
+| | CoSeg | 41.73 | 41.82 | 41.78 | 48.31 | 44.11 | 46.21 | 28.72 | 28.83 | 28.78 | 35.97 | 33.39 | 34.68 |
+| | **UPL (Ours)** | **43.13** | **42.87** | **43.00** | **48.48** | **45.18** | **46.83** | **32.09** | **32.68** | **32.39** | **39.65** | **37.15** | **38.40** |
 
 ### Qualitative Results
 
@@ -64,13 +71,13 @@ Our framework provides interpretable uncertainty estimates that correlate with p
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/UPL.git
+git clone https://github.com/your-username/UPL.git  # TODO: Replace with actual repository URL
 cd UPL
 ```
 
 2. Install dependencies:
 ```bash
-pip install -r requirements.txt
+pip install -r requirements.txt  # TODO: Create requirements.txt file
 ```
 
 3. Install PyTorch Points3D:
@@ -82,13 +89,13 @@ pip install torch-points3d
 
 ### S3DIS
 1. Download the S3DIS dataset from [here](http://buildingparser.stanford.edu/dataset.html)
-2. Preprocess the data following the instructions in the original CoSeg repository
-3. Place the processed data in `data/s3dis/`
+2. Preprocess the data following the instructions in the original CoSeg repository  # TODO: Add specific preprocessing steps
+3. Place the processed data in `data/s3dis/`  # TODO: Create data directory structure
 
 ### ScanNet
 1. Download the ScanNet dataset from [here](http://www.scan-net.org/)
-2. Preprocess the data following the instructions in the original CoSeg repository
-3. Place the processed data in `data/scannet/`
+2. Preprocess the data following the instructions in the original CoSeg repository  # TODO: Add specific preprocessing steps
+3. Place the processed data in `data/scannet/`  # TODO: Create data directory structure
 
 ## 🏃‍♂️ Training
 
@@ -136,7 +143,7 @@ python main_fs.py --config config/scannetv2_UPL_fs_train.yaml [other parameters]
 
 ### Evaluation Command
 
-```bash
+    ```bash
 python main_fs.py \
     --config config/s3dis_UPL_fs.yaml \
     --save_path my_weights/ablation/upl_s30_1w1s \
@@ -187,11 +194,11 @@ Visualization results are saved in the `vis_results/` directory when `--vis 1` i
 If you find this work useful, please cite our paper:
 
 ```bibtex
-@inproceedings{zhao2026upl,
+@inproceedings{zhao2026upl,  # TODO: Update with actual paper details when published
   title={Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation},
   author={Zhao, Yifei and Zhao, Fanyu and Li, Yinsheng},
-  booktitle={ICASSP 2026},
-  year={2026}
+  booktitle={ICASSP 2026},  # TODO: Confirm conference acceptance
+  year={2026}  # TODO: Update with actual publication year
 }
 ```
 
@@ -201,7 +208,7 @@ This work is built upon the [CoSeg](https://github.com/Na-Z/CoSeg) repository. W
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.  # TODO: Create LICENSE file
 
 ## 📞 Contact
 
