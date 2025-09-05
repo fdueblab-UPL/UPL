@@ -143,7 +143,7 @@ python main_fs.py --config config/scannetv2_UPL_fs_train.yaml [other parameters]
 
 ### Evaluation Command
 
-    ```bash
+```bash
 python main_fs.py \
     --config config/s3dis_UPL_fs.yaml \
     --save_path my_weights/ablation/upl_s30_1w1s \
