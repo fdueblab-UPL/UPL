@@ -1,10 +1,14 @@
-# UPL: Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation
+# Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation
 
-[![ICASSP 2026](https://img.shields.io/badge/ICASSP-2026-blue.svg)](https://2026.ieeeicassp.org/)
+*Yifei Zhao, Fanyu Zhao, Yinsheng Li*
+
+[![Under Review](https://img.shields.io/badge/Status-Under%20Review-orange.svg)](https://arxiv.org/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat&logo=PyTorch&logoColor=white)](https://pytorch.org/)
 
-This repository contains the official implementation of **UPL** (Uncertainty-aware Prototype Learning), a probabilistic framework for few-shot 3D point cloud segmentation that enables uncertainty-aware prototype learning through variational inference.
+Welcome to the official PyTorch implementation repository of our paper **Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation**, currently under review. This repository contains the official implementation of **UPL** (Uncertainty-aware Prototype Learning), a probabilistic framework for few-shot 3D point cloud segmentation that enables uncertainty-aware prototype learning through variational inference.
+
+> **⚠️ Note**: This code is currently under debugging and refinement. The complete and stable version will be updated soon. Please refer to the paper for detailed methodology.
 
 ## 📖 Abstract
 
@@ -61,6 +65,8 @@ Our framework provides interpretable uncertainty estimates that correlate with p
 
 ## 🚀 Installation
 
+> **⚠️ Warning**: The code is currently under active development and debugging. Some features may not work as expected. Please use with caution.
+
 ### Prerequisites
 
 - Python 3.8+
@@ -98,6 +104,8 @@ pip install torch-points3d
 3. Place the processed data in `data/scannet/`  # TODO: Create data directory structure
 
 ## 🏃‍♂️ Training
+
+> **⚠️ Note**: Training scripts are currently being debugged. The complete training pipeline will be available in the next update.
 
 ### Basic Training Command
 
@@ -143,7 +151,7 @@ python main_fs.py --config config/scannetv2_UPL_fs_train.yaml [other parameters]
 
 ### Evaluation Command
 
-```bash
+    ```bash
 python main_fs.py \
     --config config/s3dis_UPL_fs.yaml \
     --save_path my_weights/ablation/upl_s30_1w1s \
@@ -194,11 +202,11 @@ Visualization results are saved in the `vis_results/` directory when `--vis 1` i
 If you find this work useful, please cite our paper:
 
 ```bibtex
-@inproceedings{zhao2026upl,  # TODO: Update with actual paper details when published
+@article{zhao2024upl,  # TODO: Update with actual paper details when published
   title={Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation},
   author={Zhao, Yifei and Zhao, Fanyu and Li, Yinsheng},
-  booktitle={ICASSP 2026},  # TODO: Confirm conference acceptance
-  year={2026}  # TODO: Update with actual publication year
+  journal={arXiv preprint arXiv:XXXX.XXXXX},  # TODO: Update with actual arXiv ID
+  year={2024}  # TODO: Update with actual publication year
 }
 ```
 
