@@ -2,7 +2,7 @@
 
 *Yifei Zhao, Fanyu Zhao, Yinsheng Li*
 
-[![Under Review](https://img.shields.io/badge/Status-Under%20Review-orange.svg)](https://arxiv.org/)
+[![ICASSP 2026](https://img.shields.io/badge/ICASSP%202026-Under%20Review-orange.svg)](https://2026.ieeeicassp.org/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat&logo=PyTorch&logoColor=white)](https://pytorch.org/)
 
