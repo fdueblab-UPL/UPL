@@ -215,4 +215,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For questions and issues, please contact:
 - Yifei Zhao: yfzhao19@fudan.edu.cn
 - Fanyu Zhao: fyzhao20@fudan.edu.cn
-- Yinsheng Li: liys@fudan.edu.cn
