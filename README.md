@@ -1,10 +1,23 @@
-# Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation
+<p align="center">
+<h1 align="center">UPL: Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation</h1>
+<p align="center">
+<strong>Yifei Zhao</strong>,
+<strong>Fanyu Zhao</strong>,
+<strong>Yinsheng Li</strong>
+</p>
+</p>
 
-*Yifei Zhao, Fanyu Zhao, Yinsheng Li*
+<p align="center">
+<strong>ICASSP 2026 (Under Review)</strong>
+</p>
 
-[![ICASSP 2026](https://img.shields.io/badge/ICASSP%202026-Under%20Review-orange.svg)](https://2026.ieeeicassp.org/)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-%23EE4C2C.svg?style=flat&logo=PyTorch&logoColor=white)](https://pytorch.org/)
+<p align="center">
+<a href="https://fdueblab-upl.github.io/">[Project Page]</a>
+</p>
+
+<p align="center">
+<img src="figs/UPL_framework.png" alt="UPL Framework Overview" width="600"/>
+</p>
 
 Welcome to the official PyTorch implementation repository of our paper **Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation**, currently under review. This repository contains the official implementation of **UPL** (Uncertainty-aware Prototype Learning), a probabilistic framework for few-shot 3D point cloud segmentation that enables uncertainty-aware prototype learning through variational inference.
 
@@ -202,11 +215,11 @@ Visualization results are saved in the `vis_results/` directory when `--vis 1` i
 If you find this work useful, please cite our paper:
 
 ```bibtex
-@article{zhao2024upl,  # TODO: Update with actual paper details when published
+@inproceedings{zhao2026upl,  # TODO: Update with actual paper details when published
   title={Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation},
   author={Zhao, Yifei and Zhao, Fanyu and Li, Yinsheng},
-  journal={arXiv preprint arXiv:XXXX.XXXXX},  # TODO: Update with actual arXiv ID
-  year={2024}  # TODO: Update with actual publication year
+  booktitle={ICASSP 2026},  # TODO: Update with actual conference details
+  year={2026}  # TODO: Update with actual publication year
 }
 ```
 
@@ -223,3 +236,10 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 For questions and issues, please contact:
 - Yifei Zhao: yfzhao19@fudan.edu.cn
 - Fanyu Zhao: fyzhao20@fudan.edu.cn
+- Yinsheng Li: liys@fudan.edu.cn
+
+## 📄 Copyright Notice
+
+**© 2026 IEEE. Personal use of this material is permitted. Permission from IEEE must be obtained for all other uses, in any current or future media, including reprinting/republishing this material for advertising or promotional purposes, creating new collective works, for resale or redistribution to servers or lists, or reuse of any copyrighted component of this work in other works.**
+
+*This work is submitted to ICASSP 2026 and is currently under review. Upon publication, the paper's Digital Object Identifier (DOI) will be added to this repository.*
