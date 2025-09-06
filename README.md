@@ -164,7 +164,7 @@ python main_fs.py --config config/scannetv2_UPL_fs_train.yaml [other parameters]
 
 ### Evaluation Command
 
-    ```bash
+```bash
 python main_fs.py \
     --config config/s3dis_UPL_fs.yaml \
     --save_path my_weights/ablation/upl_s30_1w1s \
@@ -215,11 +215,12 @@ Visualization results are saved in the `vis_results/` directory when `--vis 1` i
 If you find this work useful, please cite our paper:
 
 ```bibtex
-@inproceedings{zhao2026upl,  # TODO: Update with actual paper details when published
+@article{zhao2026upl,
   title={Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation},
   author={Zhao, Yifei and Zhao, Fanyu and Li, Yinsheng},
-  booktitle={ICASSP 2026},  # TODO: Update with actual conference details
-  year={2026}  # TODO: Update with actual publication year
+  journal={Under Review},
+  year={2026},
+  url={https://fdueblab-UPL.github.io/}
 }
 ```
 
