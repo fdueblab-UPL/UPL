@@ -107,3 +107,11 @@ data/
 *.sh
 logs
 val.py
+model/s3dis_UPL_fs_train.yaml
+model/my_train (2).txt
+model/my_train (4).txt
+main_fs_vis.py
+my_train (4).txt
+my_train.txt
+config/s3dis_UPL_fs_train.yaml
+model/drvpi_vis_new.py

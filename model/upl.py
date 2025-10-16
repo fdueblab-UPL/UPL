@@ -5,7 +5,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-import wandb
 from model.stratified_transformer import Stratified
 from model.common import MLPWithoutResidual, KPConvResBlock, AggregatorLayer
 
@@ -326,7 +325,8 @@ class UPL(nn.Module):
         support_base_y: Optional[torch.Tensor] = None,
         query_base_y: Optional[torch.Tensor] = None,
         sampled_classes: Optional[np.array] = None,
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    ) -> Tuple[torch.Tensor, torch.Tensor, float, torch.Tensor]:
+
         """
         Forward pass of the UPL model.
 
@@ -345,6 +345,8 @@ class UPL(nn.Module):
         Returns:
             final_pred: Predicted class logits for query point clouds (shape: [1, n_way+1, N_query]).
             loss: The total loss value for this forward pass.
+            avg_uncertainty: Mean uncertainty value across query points (float).
+            kl_loss_val: KL loss value for this forward (torch.Tensor).
         """
 
         # get downsampled support features
@@ -572,6 +574,7 @@ class UPL(nn.Module):
                 ]
                 # 针对第i个batch构建sparse_embeddings
             sample_predictions = []
+            final_pred_sample_list=[]
                 
             for sample_idx in range(num_samples):
                 if self.use_vpir:
@@ -654,6 +657,7 @@ class UPL(nn.Module):
                         correlations.view(correlations.shape[0], -1)
                     )  # N_q, C
 
+
                 # kpconv layer
                 coord = query_x_low_list[i]  # N_q, 3
                 batch = torch.zeros(
@@ -679,21 +683,37 @@ class UPL(nn.Module):
                 # classification layer
                 out = self.cls(correlations)  # N_q, n_way+1
                 sample_predictions.append(out)
+                final_pred_sample = (
+                pointops.interpolation(
+                    query_x_low,
+                    query_x[:, :3].cuda().contiguous(),
+                    out.contiguous(),
+                    query_offset_low,
+                    query_offset.cuda(),
+                )
+                .transpose(0, 1)
+                .unsqueeze(0) )  # 1, n_way+1, N_query
+                final_pred_sample_list.append(final_pred_sample)  # 1, n_way+1, N_query
+                
              # 集成多个采样的结果
             if num_samples == 1:
                 final_out = sample_predictions[0]
-                uncertainty = torch.zeros_like(final_out)
             else:
                 stacked_predictions = torch.stack(sample_predictions, dim=0)
                 final_out = stacked_predictions.mean(dim=0)
-                # 使用预测类别的方差作为不确定性
-                probs = F.softmax(stacked_predictions, dim=-1)
-                uncertainty = probs.var(dim=0).sum(dim=-1)  # 更好的不确定性度量
+                final_pred_sample_stack = torch.stack(final_pred_sample_list, dim=0)  # [num_samples, 1, n_way+1, N_query]
 
-            all_uncertainties.append(uncertainty.mean().item())  # 统计均值
+                # 计算不确定性
+                prob = F.softmax(final_pred_sample_stack, dim=2)  # [num_samples, 1, n_way+1, N_query]
+                prob_mean = prob.mean(dim=0).squeeze(0)  # [n_way+1, N_query]
+                uncertainty = -(prob_mean * torch.log(prob_mean + 1e-8)).sum(dim=0)  # [N_query]
+                all_uncertainties.append(uncertainty) 
             query_pred.append(final_out)
-
         query_pred = torch.cat(query_pred)  # N_q, n_way+1
+        if len(all_uncertainties) > 0:
+            all_uncertainties = torch.cat(all_uncertainties)  # N_q
+        else:
+            all_uncertainties = torch.zeros(query_pred.shape[0], device=query_pred.device)
 
         # NaN检查
         assert not torch.any(
@@ -734,9 +754,8 @@ class UPL(nn.Module):
                 all_uncertainties,
             )
 
-        avg_uncertainty = float(np.mean(all_uncertainties))  # 所有batch均值
         kl_loss_val = sum(kl_losses) / len(kl_losses) if len(kl_losses) > 0 else torch.tensor(0.0)
-        return final_pred, loss, avg_uncertainty, kl_loss_val
+        return final_pred, loss, 0.0, kl_loss_val
 
     def getFeatures(self, ptclouds, offset, gt, query_base_y=None):
         """
@@ -1053,17 +1072,20 @@ class UPL(nn.Module):
             ax.set_zlim(z_min, z_max)
             ax.set_box_aspect([x_max-x_min, y_max-y_min, z_max-z_min])
             plot_idx += 1
-            # 不确定性可视化 - 使用标量不确定性值
-            # 由于uncertainty是标量，我们创建一个基于不确定性值的颜色映射
-            uncertainty_scalar = float(uncertainty)
-            # 将不确定性值映射到颜色
-            jet_cmap = matplotlib.cm.get_cmap('jet')
-            uncertainty_color = jet_cmap(uncertainty_scalar)[:3]
-            
-            # 为所有点使用相同的颜色（基于整体不确定性）
-            colors = np.ones((xyz.shape[0], 3)) * 0.9  # 默认灰色
-            # 可以根据不确定性值调整颜色强度
-            colors = colors * 0.5 + np.array(uncertainty_color) * 0.5
+
+            # 不确定性
+            # uncertainty = np.clip(uncertainty, a_min=0, a_max=np.percentile(uncertainty, 95))
+            uncertainty = (uncertainty - uncertainty.min()) / (uncertainty.max() - uncertainty.min() + 1e-8)
+            threshold = np.percentile(uncertainty, 90)
+            mask = uncertainty >= threshold
+
+            colors = np.ones((uncertainty.shape[0], 3)) * 0.9  # 默认灰色
+            if np.any(mask):
+                unc_masked = uncertainty[mask]
+                unc_masked = (unc_masked - unc_masked.min()) / (unc_masked.max() - unc_masked.min() + 1e-8)
+                jet_cmap = matplotlib.cm.get_cmap('jet')
+                jet_colors = jet_cmap(unc_masked)[:, :3]
+                colors[mask] = jet_colors  # 热力点赋色
 
             ax = fig.add_subplot(rows, cols, plot_idx, projection='3d')
             ax.view_init(elev=0, azim=0)
@@ -1076,6 +1098,7 @@ class UPL(nn.Module):
             ax.set_zlim(z_min, z_max)
             ax.set_box_aspect([x_max-x_min, y_max-y_min, z_max-z_min])
             plot_idx += 1
+
         plt.tight_layout()
         timestamp = int(time.time() * 1000)  # 毫秒级时间戳
         filename = f'episode_vis_{timestamp}_rank{rank}.png'

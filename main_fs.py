@@ -140,12 +140,12 @@ def main_worker(gpu, ngpus_per_node, argss):
         global logger, writer
         logger = get_logger(args.save_path)
         writer = SummaryWriter(args.save_path)
-        if args.vis:
-            wandb.init(
-                project="UPL",
-                name=os.path.basename(args.save_path),
-                config=args,
-            )
+        # if args.vis:
+        #     wandb.init(
+        #         project="UPL",
+        #         name=os.path.basename(args.save_path),
+        #         config=args,
+        #     )
 
     # get model
     model = UPL(args)
@@ -761,10 +761,10 @@ def validate(val_loader, model, valid_calsses):
     target_meter = AverageMeter()
     uncertainty_meter = AverageMeter()
 
-    if args.forvis:
-        target_class = val_loader.dataset.target_class
-        pred_path = os.path.join(args.vis_save_path, target_class)
-        os.makedirs(pred_path, exist_ok=True)
+    # if args.forvis:
+    #     target_class = val_loader.dataset.target_class
+    #     pred_path = os.path.join(args.vis_save_path, target_class)
+    #     os.makedirs(pred_path, exist_ok=True)
 
     torch.cuda.empty_cache()
     model.eval()
