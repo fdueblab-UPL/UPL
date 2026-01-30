@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-<strong>ICASSP 2026 (Under Review)</strong>
+<strong>ICASSP 2026 (Accepted)</strong>
 </p>
 
 <p align="center">
