@@ -215,12 +215,13 @@ Visualization results are saved in the `vis_results/` directory when `--vis 1` i
 If you find this work useful, please cite our paper:
 
 ```bibtex
-@article{zhao2026upl,
+@inproceedings{zhao2026upl,
   title={Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation},
   author={Zhao, Yifei and Zhao, Fanyu and Li, Yinsheng},
-  journal={Under Review},
+  booktitle={IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   year={2026},
-  url={https://fdueblab-UPL.github.io/}
+  organization={IEEE},
+  url={https://fdueblab-upl.github.io/}
 }
 ```
 
