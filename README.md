@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-<strong>ICASSP 2026 (Accepted)</strong>
+<strong>ICASSP 2026 (Oral)</strong>
 </p>
 
 <p align="center">
