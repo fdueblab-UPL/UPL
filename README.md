@@ -12,6 +12,7 @@
 </p>
 
 <p align="center">
+<a href="https://arxiv.org/abs/2603.19757">[Paper]</a>
 <a href="https://fdueblab-upl.github.io/">[Project Page]</a>
 </p>
 
@@ -19,9 +20,7 @@
 <img src="figs/UPL_framework.png" alt="UPL Framework Overview" width="600"/>
 </p>
 
-Welcome to the official PyTorch implementation repository of our paper **Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation**, currently under review. This repository contains the official implementation of **UPL** (Uncertainty-aware Prototype Learning), a probabilistic framework for few-shot 3D point cloud segmentation that enables uncertainty-aware prototype learning through variational inference.
-
-> **⚠️ Note**: This code is currently under debugging and refinement. The complete and stable version will be updated soon. Please refer to the paper for detailed methodology.
+Welcome to the official PyTorch implementation repository of our paper **Uncertainty-aware Prototype Learning with Variational Inference for Few-shot Point Cloud Segmentation** (ICASSP 2026 Oral). This repository contains the official implementation of **UPL** (Uncertainty-aware Prototype Learning), a probabilistic framework for few-shot 3D point cloud segmentation that enables uncertainty-aware prototype learning through variational inference.
 
 ## 📖 Abstract
 
@@ -78,8 +77,6 @@ Our framework provides interpretable uncertainty estimates that correlate with p
 
 ## 🚀 Installation
 
-> **⚠️ Warning**: The code is currently under active development and debugging. Some features may not work as expected. Please use with caution.
-
 ### Prerequisites
 
 - Python 3.8+
@@ -90,13 +87,13 @@ Our framework provides interpretable uncertainty estimates that correlate with p
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/your-username/UPL.git  # TODO: Replace with actual repository URL
+git clone https://github.com/fdueblab-UPL/UPL.git
 cd UPL
 ```
 
 2. Install dependencies:
 ```bash
-pip install -r requirements.txt  # TODO: Create requirements.txt file
+pip install -r requirements.txt
 ```
 
 3. Install PyTorch Points3D:
@@ -108,17 +105,15 @@ pip install torch-points3d
 
 ### S3DIS
 1. Download the S3DIS dataset from [here](http://buildingparser.stanford.edu/dataset.html)
-2. Preprocess the data following the instructions in the original CoSeg repository  # TODO: Add specific preprocessing steps
-3. Place the processed data in `data/s3dis/`  # TODO: Create data directory structure
+2. Preprocess the data following the instructions in the [CoSeg](https://github.com/Na-Z/CoSeg) repository
+3. Place the processed data in `data/s3dis/`
 
 ### ScanNet
 1. Download the ScanNet dataset from [here](http://www.scan-net.org/)
-2. Preprocess the data following the instructions in the original CoSeg repository  # TODO: Add specific preprocessing steps
-3. Place the processed data in `data/scannet/`  # TODO: Create data directory structure
+2. Preprocess the data following the instructions in the [CoSeg](https://github.com/Na-Z/CoSeg) repository
+3. Place the processed data in `data/scannet/`
 
 ## 🏃‍♂️ Training
-
-> **⚠️ Note**: Training scripts are currently being debugged. The complete training pipeline will be available in the next update.
 
 ### Basic Training Command
 
@@ -220,10 +215,11 @@ If you find this work useful, please cite our paper:
   author={Zhao, Yifei and Zhao, Fanyu and Li, Yinsheng},
   booktitle={IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
   year={2026},
-  organization={IEEE},
-  url={https://fdueblab-upl.github.io/}
+  organization={IEEE}
 }
 ```
+
+You can also find our paper on [arXiv](https://arxiv.org/abs/2603.19757).
 
 ## 🙏 Acknowledgments
 
@@ -231,7 +227,7 @@ This work is built upon the [CoSeg](https://github.com/Na-Z/CoSeg) repository. W
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.  # TODO: Create LICENSE file
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
 
 ## 📞 Contact
 
@@ -243,4 +239,4 @@ For questions and issues, please contact:
 
 **© 2026 IEEE. Personal use of this material is permitted. Permission from IEEE must be obtained for all other uses, in any current or future media, including reprinting/republishing this material for advertising or promotional purposes, creating new collective works, for resale or redistribution to servers or lists, or reuse of any copyrighted component of this work in other works.**
 
-*This work is submitted to ICASSP 2026 and is currently under review. Upon publication, the paper's Digital Object Identifier (DOI) will be added to this repository.*
+*This work has been accepted by ICASSP 2026 as an Oral presentation.*

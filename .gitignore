@@ -115,3 +115,15 @@ my_train (4).txt
 my_train.txt
 config/s3dis_UPL_fs_train.yaml
 model/drvpi_vis_new.py
+
+# Local files
+saved_models/
+vis/
+*.pdf
+*.tex
+*.png
+*.jpg
+mcp_test.py
+upl_mcp.py
+upl_mcp_requirements.txt
+generate_framework_figure.py

@@ -42,6 +42,7 @@ from util.common_util import load_pretrain_checkpoint, evaluate_metric
 # from model.drvpi import UPL
 from model.upl import UPL
 import wandb
+import torch.nn.functional as F
 
 
 def get_parser():
@@ -750,9 +751,28 @@ def train(
     return loss_meter.avg, mIoU, mAcc, allAcc, kl_loss_meter.avg
 
 
+def compute_ece(probs, target, num_bins=15):
+    with torch.no_grad():
+        conf, pred = probs.max(dim=1)
+        correct = (pred == target).float()
+        bin_edges = torch.linspace(0, 1, steps=num_bins + 1, device=probs.device)
+        bin_ids = torch.bucketize(conf, bin_edges, right=True) - 1
+        ece = torch.zeros(1, device=probs.device)
+        for b in range(num_bins):
+            mask = bin_ids == b
+            if mask.sum() == 0:
+                continue
+            acc_b = correct[mask].mean()
+            conf_b = conf[mask].mean()
+            w = mask.float().mean()
+            ece += w * (acc_b - conf_b).abs()
+        return ece.item()
+
+
 def validate(val_loader, model, valid_calsses):
     if main_process():
         logger.info(">>>>>>>>>>>>>>>> Start Evaluation >>>>>>>>>>>>>>>>")
+    probs_list, target_list = [], []  # 新增
     batch_time = AverageMeter()
     data_time = AverageMeter()
     loss_meter = AverageMeter()
@@ -808,6 +828,16 @@ def validate(val_loader, model, valid_calsses):
                 sampled_classes=sampled_classes,
             )
 
+        # 先保存概率用于ECE
+        probs = F.softmax(output, dim=1)              # [B,C,N] 或 [1,C,N]
+        probs = probs.permute(0, 2, 1).reshape(-1, probs.shape[1])  # [N,C]
+        target_flat = query_y.reshape(-1)
+        if args.ignore_label is not None:
+            mask = target_flat != args.ignore_label
+            probs = probs[mask]
+            target_flat = target_flat[mask]
+        probs_list.append(probs.cpu())
+        target_list.append(target_flat.cpu())
 
         output = output.max(1)[1].squeeze(0)  # output: 1, c, pts
         n = query_y.size(0)
@@ -895,14 +925,21 @@ def validate(val_loader, model, valid_calsses):
     mIoU = np.mean(iou_class)
     mAcc = np.mean(accuracy_class)
     allAcc = sum(intersection_meter.sum) / (sum(target_meter.sum) + 1e-10)
-    avg_uncertainty = uncertainty_meter.avg  # 新增
+    avg_uncertainty = uncertainty_meter.avg
 
     if main_process():
+        # 计算并记录 ECE
+        all_probs = torch.cat(probs_list, dim=0)
+        all_target = torch.cat(target_list, dim=0)
+        ece = compute_ece(all_probs, all_target, num_bins=15)
         logger.info(
-            "Val result: mIoU/mAcc/allAcc {:.4f}/{:.4f}/{:.4f}, uncertainty {:.4f}.".format(
-                mIoU, mAcc, allAcc, avg_uncertainty
+            "Val result: mIoU/mAcc/allAcc {:.4f}/{:.4f}/{:.4f}, ECE {:.4f}.".format(
+                mIoU, mAcc, allAcc, ece
             )
         )
+        print(f"DEBUG: ECE computed = {ece}")  # 直接打印到控制台验证
+        if "writer" in globals() and writer is not None:
+            writer.add_scalar("calibration/ece", ece, 0)  # 用 0 或其他固定值代替 args.start_epoch
         for i in range(len(valid_calsses)):
             logger.info(
                 "Class_{} Result: iou/accuracy {:.4f}/{:.4f}.".format(
